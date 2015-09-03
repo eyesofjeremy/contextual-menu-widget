@@ -29,11 +29,12 @@ class Contextual_Menu_Widget extends WP_Widget
 <?php
   }
  
-  function update($new_instance, $old_instance)
-  {
+  function update($new_instance, $old_instance) {
+  
     $instance = $old_instance;
-    $instance['title'] = $new_instance['title'];
-    $instance['menu'] = $new_instance['menu'];
+    foreach( $new_instance as $key => $value ) {
+      $instance[$key] = $value;
+    }
     return $instance;
   }
  
