@@ -62,11 +62,75 @@ class Contextual_Menu_Widget extends WP_Widget
         }
 
         echo $after_widget;
+
+    } else { 
+    	// If we don't have a specified menu, then build one from
+    	// (a) part of an existing menu, or
+    	// (b) the page hierarchy.
+    	// TODO: make this a setting. Because we might not want a menu at all!
+
+			// check for a backup menu to use
+			$menu_backup = ! empty( $instance['menu'] ) ? $instance['menu'] : FALSE;
+			
+			if( $menu_backup ) {
+				
+				// Get a submenu
+				$args = array(
+					'menu'		=> $menu_backup,
+					'submenu'	=> $menu_slug,
+				);
+				
+				wp_nav_menu( $args );
+			}
+ 
     }
  
   }
     
+
+// This filter and below two functions come from
+// http://wordpress.stackexchange.com/a/2809/21375
+// modified to check for $post->post_name instead of $post->title
+
+add_filter( 'wp_nav_menu_objects', 'submenu_limit', 10, 2 );
+
+/*
+ * submenu_limit
+ * Unset items from a menu that aren't part the children of a particular page.
+ */
+
+function submenu_limit( $items, $args ) {
+
+    if ( empty( $args->submenu ) ) {
+        return $items;
+    }
+
+    $ids       = wp_filter_object_list( $items, array( 'post_name' => $args->submenu ), 'and', 'ID' );
+    $parent_id = array_pop( $ids );
+    $children  = submenu_get_children_ids( $parent_id, $items );
+
+    foreach ( $items as $key => $item ) {
+
+        if ( ! in_array( $item->ID, $children ) ) {
+            unset( $items[$key] );
+        }
+    }
+
+    return $items;
 }
+
+function submenu_get_children_ids( $id, $items ) {
+
+    $ids = wp_filter_object_list( $items, array( 'menu_item_parent' => $id ), 'and', 'ID' );
+
+    foreach ( $ids as $id ) {
+
+        $ids = array_merge( $ids, submenu_get_children_ids( $id, $items ) );
+    }
+
+    return $ids;
+}
+
 add_action( 'widgets_init', create_function('', 'return register_widget("Contextual_Menu_Widget");') );
 
 function is_in_nav_menu( $menu_slug ) {
