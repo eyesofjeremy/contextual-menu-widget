@@ -20,9 +20,10 @@ class Contextual_Menu_Widget extends WP_Widget
  
   function form($instance)
   {
-    $instance = wp_parse_args((array) $instance, array( 'title' => '', 'menu' => '' ));
-    $title = $instance['title'];
-    $menu = $instance['menu'];
+    $instance = wp_parse_args((array) $instance, array( 'title' => '', 'menu' => '', 'include_parent' => 'off' ));
+    $title          = $instance['title'];
+    $menu           = $instance['menu'];
+    $include_parent = $instance['include_parent'] ? 'on' : 'off';
 ?>
   <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
   <p>If you have <a href="<?php echo admin_url(); ?>nav-menus.php">custom menus</a> built, you can use one as the basis for your contextual menu. The items listed will be the part of the menu starting with the top-level ancestor of the current page the visitor is on.</p>
@@ -47,6 +48,11 @@ class Contextual_Menu_Widget extends WP_Widget
   </select>
   </p>
 
+  <p>
+    <input class="checkbox" type="checkbox" <?php checked($instance['include_parent'], 'on'); ?> id="<?php echo $this->get_field_id('include_parent'); ?>" name="<?php echo $this->get_field_name('include_parent'); ?>" /> 
+    <label for="<?php echo $this->get_field_id('include_parent'); ?>">Show Top-Level Page</label>
+  </p>
+
 <?php
     } else { // clear out menu setting if no menu exists
 ?>
@@ -61,6 +67,7 @@ class Contextual_Menu_Widget extends WP_Widget
     foreach( $new_instance as $key => $value ) {
       $instance[$key] = $value;
     }
+    $instance['include_parent'] = $new_instance['include_parent'];
     return $instance;
   }
  
@@ -111,8 +118,12 @@ class Contextual_Menu_Widget extends WP_Widget
 					'submenu'	=> $menu_slug,
 				);
 
-				// Include parent item
-				$args['submenu_parent'] = $menu_slug;
+				// Include parent item if set
+				$include_parent = $instance['include_parent'];
+				
+				if( $include_parent ) {
+					$args['submenu_parent'] = $menu_slug;
+				}
 				
 				wp_nav_menu( $args );
 			}
