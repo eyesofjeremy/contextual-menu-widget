@@ -20,10 +20,12 @@ class Contextual_Menu_Widget extends WP_Widget
  
   function form($instance)
   {
-    $instance = wp_parse_args((array) $instance, array( 'title' => '' ));
+    $instance = wp_parse_args((array) $instance, array( 'title' => '', 'menu' => '' ));
     $title = $instance['title'];
+    $menu = $instance['menu'];
 ?>
   <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
+  <p><label for="<?php echo $this->get_field_id('menu'); ?>">Menu Name: <input class="widefat" id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>" type="text" value="<?php echo attribute_escape($menu); ?>" /></label></p>
 <?php
   }
  
@@ -31,6 +33,7 @@ class Contextual_Menu_Widget extends WP_Widget
   {
     $instance = $old_instance;
     $instance['title'] = $new_instance['title'];
+    $instance['menu'] = $new_instance['menu'];
     return $instance;
   }
  
