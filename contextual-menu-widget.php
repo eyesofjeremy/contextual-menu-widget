@@ -46,23 +46,7 @@ class Contextual_Menu_Widget extends WP_Widget
     // Do Your Widgety Stuff Here...
     global $post;
 
-    /*  - - - - - - - - - -
-        special case: resources
-        
-        Ideally, we should be able to check if we are in a particular menu,
-        but that seems like a lot of work.
-        - - - - - - - - - - */
-
-    if( is_in_nav_menu('resources') ) {
-
-        $menu_slug = 'resources';
-        
-    } else {
-
-        // this would be standard behavior
-        $menu_slug = get_greatancestor_name($post);
-    }
-
+		$menu_slug = get_greatancestor_name( $post );
     // Get a menu if we have one setup
     if( wp_get_nav_menu_object( $menu_slug) !== FALSE ) {
 
