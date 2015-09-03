@@ -10,16 +10,17 @@ Author URI: http://jeremycarlson.com/
 
 
 
-class Contextual_Menu_Widget extends WP_Widget
-{
-  function Contextual_Menu_Widget()
-  {
+class Contextual_Menu_Widget extends WP_Widget {
+
+  function Contextual_Menu_Widget() {
+  
     $widget_ops = array('classname' => 'Contextual_Menu_Widget', 'description' => 'Add context-aware menu based on top level page. ');
     $this->WP_Widget('Contextual_Menu_Widget', 'Contextual Menu', $widget_ops);
+    
   }
  
-  function form($instance)
-  {
+  function form($instance) {
+  
     $instance = wp_parse_args((array) $instance, array( 'title' => '', 'menu' => '', 'include_parent' => 'off' ));
     $title          = $instance['title'];
     $menu           = $instance['menu'];
@@ -62,17 +63,18 @@ class Contextual_Menu_Widget extends WP_Widget
   }
  
   function update($new_instance, $old_instance) {
-  
+
     $instance = $old_instance;
     foreach( $new_instance as $key => $value ) {
       $instance[$key] = $value;
     }
     $instance['include_parent'] = $new_instance['include_parent'];
+
     return $instance;
   }
  
-  function widget($args, $instance)
-  {
+  function widget($args, $instance) {
+  
     extract($args, EXTR_SKIP);
  
  		// make title like other widget titles.
