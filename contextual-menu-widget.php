@@ -70,8 +70,7 @@ class Contextual_Menu_Widget extends WP_Widget
 
     } else { 
     	// If we don't have a specified menu, then build one from
-    	// (a) part of an existing menu, or
-    	// (b) the page hierarchy.
+    	// part of an existing menu, if we have it.
     	// TODO: make this a setting. Because we might not want a menu at all!
 
 			// check for a backup menu to use
