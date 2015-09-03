@@ -77,7 +77,7 @@ class Contextual_Menu_Widget extends WP_Widget {
   
     extract($args, EXTR_SKIP);
  
- 		// make title like other widget titles.
+    // make title like other widget titles.
     $title = ! empty( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
     
     if (!empty($title))
@@ -86,10 +86,10 @@ class Contextual_Menu_Widget extends WP_Widget {
     // Do Your Widgety Stuff Here...
     global $post;
 
-		// Pay respect to your great ancestors!
-		// Get top-level page information
-		$venerable_one = get_greatancestor( $post );
-		$menu_slug = $venerable_one->post_name;
+    // Pay respect to your great ancestors!
+    // Get top-level page information
+    $venerable_one = get_greatancestor( $post );
+    $menu_slug = $venerable_one->post_name;
 
     // Get a menu if we have one setup
     if( wp_get_nav_menu_object( $menu_slug) !== FALSE ) {
@@ -105,30 +105,30 @@ class Contextual_Menu_Widget extends WP_Widget {
         echo $after_widget;
 
     } else { 
-    	// If we don't have a specified menu, then build one from
-    	// part of an existing menu, if we have it.
-    	// TODO: make this a setting. Because we might not want a menu at all!
+      // If we don't have a specified menu, then build one from
+      // part of an existing menu, if we have it.
+      // TODO: make this a setting. Because we might not want a menu at all!
 
-			// check for a backup menu to use
-			$menu_backup = ! empty( $instance['menu'] ) ? $instance['menu'] : FALSE;
-			
-			if( $menu_backup ) {
-				
-				// Get a submenu
-				$args = array(
-					'menu'		=> $menu_backup,
-					'submenu'	=> $menu_slug,
-				);
+      // check for a backup menu to use
+      $menu_backup = ! empty( $instance['menu'] ) ? $instance['menu'] : FALSE;
+      
+      if( $menu_backup ) {
+        
+        // Get a submenu
+        $args = array(
+          'menu'    => $menu_backup,
+          'submenu' => $menu_slug,
+        );
 
-				// Include parent item if set
-				$include_parent = $instance['include_parent'];
-				
-				if( $include_parent ) {
-					$args['submenu_parent'] = $menu_slug;
-				}
-				
-				wp_nav_menu( $args );
-			}
+        // Include parent item if set
+        $include_parent = $instance['include_parent'];
+        
+        if( $include_parent ) {
+          $args['submenu_parent'] = $menu_slug;
+        }
+        
+        wp_nav_menu( $args );
+      }
  
     }
  
@@ -159,7 +159,7 @@ function submenu_limit( $items, $args ) {
 
     // Add parent ID if set.
     if ( ! empty( $args->submenu_parent ) ) {
-    	$children[] = $parent_id;
+      $children[] = $parent_id;
     }
 
     foreach ( $items as $key => $item ) {
@@ -206,12 +206,12 @@ function is_in_nav_menu( $menu_slug ) {
     $items = wp_get_nav_menu_items($menu_slug);
     
     if( is_array( $items ) && ! empty( $items ) ) {
-			foreach($items as $menu_item) {
-				echo ' ' . $menu_item->object_id;
-				if($menu_item->object_id == $id) {
-					return TRUE; // found!
-				}
-			}
+      foreach($items as $menu_item) {
+        echo ' ' . $menu_item->object_id;
+        if($menu_item->object_id == $id) {
+          return TRUE; // found!
+        }
+      }
     }
     return false;
 }
@@ -222,7 +222,7 @@ function get_greatancestor( $post ) {      // $post = The current post
     if ( is_page($post) ) {
 
         // HT: http://cssglobe.com/post/5812/wordpress-find-pages-top-level-parent-id
-        if ($post->post_parent)	{
+        if ($post->post_parent) {
             $ancestors = get_post_ancestors( $post->ID );
             $root = count($ancestors)-1;
             $greatancestor = $ancestors[$root];
