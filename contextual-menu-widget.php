@@ -80,8 +80,11 @@ class Contextual_Menu_Widget extends WP_Widget {
     // make title like other widget titles.
     $title = ! empty( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
     
-    if (!empty($title))
-      echo $before_title . $title . $after_title;;
+    // Begin to set up code to be output
+    $widget_output = ( ! empty( $title ) ) ? $before_title . $title . $after_title : '';
+    
+    // We will not be outputting anything unless we, in fact, have a menu to post.
+    $widget_wanted = FALSE;
  
     // Do Your Widgety Stuff Here...
     global $post;
@@ -90,19 +93,20 @@ class Contextual_Menu_Widget extends WP_Widget {
     // Get top-level page information
     $venerable_one = get_greatancestor( $post );
     $menu_slug = $venerable_one->post_name;
+    
+    // If we have before_widget stuff, add it.
+    $widget_output .= $args['before_widget'];
 
     // Get a menu if we have one setup
     if( wp_get_nav_menu_object( $menu_slug) !== FALSE ) {
 
-        echo $before_widget;
-
-        wp_nav_menu( array( 'menu' => $menu_slug ) );
+        // Well, we have a menu based on the great ancestor slug - have at it!
+        $widget_wanted = TRUE;
+        $widget_output .= wp_nav_menu( array( 'menu' => $menu_slug, 'echo' => FALSE ) );
 
         if(current_user_can('edit_theme_options')) {
-            echo '<a class="post-edit-link" href="' . admin_url('nav-menus.php') . '?action=edit&menu=' . wp_get_nav_menu_object($menu_slug)->term_id . '">' . __('edit menu') .'</a>';
+            $widget_output .= '<a class="post-edit-link" href="' . admin_url('nav-menus.php') . '?action=edit&menu=' . wp_get_nav_menu_object($menu_slug)->term_id . '">' . __('edit menu') .'</a>';
         }
-
-        echo $after_widget;
 
     } else { 
       // If we don't have a specified menu, then build one from
@@ -114,10 +118,14 @@ class Contextual_Menu_Widget extends WP_Widget {
       
       if( $menu_backup ) {
         
+        // okay we still want to show a menu
+        $widget_wanted = TRUE;
+
         // Get a submenu
         $args = array(
           'menu'    => $menu_backup,
           'submenu' => $menu_slug,
+          'echo'    => FALSE,
         );
 
         // Include parent item if set
@@ -127,11 +135,18 @@ class Contextual_Menu_Widget extends WP_Widget {
           $args['submenu_parent'] = $menu_slug;
         }
         
-        wp_nav_menu( $args );
+        $widget_output .= wp_nav_menu( $args );
       }
  
     }
- 
+    
+    if( $widget_wanted ) {
+
+      // wrap up the widget
+      $widget_output .= $args['after_widget'];
+
+      echo $widget_output;
+    }
   }
     
 } // end class
