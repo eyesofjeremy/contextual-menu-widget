@@ -65,9 +65,8 @@ class Contextual_Menu_Widget extends WP_Widget {
   function update($new_instance, $old_instance) {
 
     $instance = $old_instance;
-    foreach( $new_instance as $key => $value ) {
-      $instance[$key] = $value;
-    }
+    $instance['title'] = strip_tags( $new_instance['title'] );
+    $instance['menu'] = $new_instance['menu'];
     $instance['include_parent'] = $new_instance['include_parent'];
 
     return $instance;
