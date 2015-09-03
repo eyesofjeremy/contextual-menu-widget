@@ -228,7 +228,7 @@ function is_in_nav_menu( $menu_slug ) {
         }
       }
     }
-    return false;
+    return FALSE;
 }
 
 function get_greatancestor( $post ) {      // $post = The current post
@@ -247,7 +247,7 @@ function get_greatancestor( $post ) {      // $post = The current post
             return $post;
         }
     }
-    return false;  // we aren't at the page, and the page is not an ancestor
+    return FALSE;  // we aren't at the page, and the page is not an ancestor
 }
 
 ?>
