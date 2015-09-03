@@ -41,8 +41,9 @@ class Contextual_Menu_Widget extends WP_Widget
   {
     extract($args, EXTR_SKIP);
  
-    $title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
- 
+ 		// make title like other widget titles.
+    $title = ! empty( $instance['title'] ) ? apply_filters( 'widget_title', $instance['title'] ) : '';
+    
     if (!empty($title))
       echo $before_title . $title . $after_title;;
  
@@ -50,6 +51,7 @@ class Contextual_Menu_Widget extends WP_Widget
     global $post;
 
 		$menu_slug = get_greatancestor_name( $post );
+
     // Get a menu if we have one setup
     if( wp_get_nav_menu_object( $menu_slug) !== FALSE ) {
 
@@ -87,6 +89,7 @@ class Contextual_Menu_Widget extends WP_Widget
  
   }
     
+} // end class
 
 // This filter and below two functions come from
 // http://wordpress.stackexchange.com/a/2809/21375
