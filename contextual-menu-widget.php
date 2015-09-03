@@ -81,6 +81,9 @@ class Contextual_Menu_Widget extends WP_Widget
 					'menu'		=> $menu_backup,
 					'submenu'	=> $menu_slug,
 				);
+
+				// Include parent item
+				$args['submenu_parent'] = $menu_slug;
 				
 				wp_nav_menu( $args );
 			}
@@ -111,6 +114,11 @@ function submenu_limit( $items, $args ) {
     $ids       = wp_filter_object_list( $items, array( 'post_name' => $args->submenu ), 'and', 'ID' );
     $parent_id = array_pop( $ids );
     $children  = submenu_get_children_ids( $parent_id, $items );
+
+    // Add parent ID if set.
+    if ( ! empty( $args->submenu_parent ) ) {
+    	$children[] = $parent_id;
+    }
 
     foreach ( $items as $key => $item ) {
 
