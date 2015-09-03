@@ -25,8 +25,34 @@ class Contextual_Menu_Widget extends WP_Widget
     $menu = $instance['menu'];
 ?>
   <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
-  <p><label for="<?php echo $this->get_field_id('menu'); ?>">Menu Name: <input class="widefat" id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>" type="text" value="<?php echo attribute_escape($menu); ?>" /></label></p>
+  <p>If you have <a href="<?php echo admin_url(); ?>nav-menus.php">custom menus</a> built, you can use one as the basis for your contextual menu. The items listed will be the part of the menu starting with the top-level ancestor of the current page the visitor is on.</p>
+
 <?php
+    // List custom menus if they have been set up by user
+    $custom_menus = get_terms( 'nav_menu', array( 'hide_empty' => true ) );
+    if( ! empty( $custom_menus ) ) {
+?>
+  <p><label for="<?php echo $this->get_field_id('menu'); ?>">Menu Name: 
+  <select  id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>">
+    <option value="">Choose a menu...</option>
+<?php
+      foreach( $custom_menus as $menu_item ) {
+        
+        // check if this option has been selected   
+        $selected = ( $menu_item->slug == $menu ) ? ' selected' : '';
+        echo "<option value='{$menu_item->slug}'$selected>{$menu_item->name}</option>
+";
+      }
+?>
+  </select>
+  </p>
+
+<?php
+    } else { // clear out menu setting if no menu exists
+?>
+  <p><input id="<?php echo $this->get_field_id('menu'); ?>" name="<?php echo $this->get_field_name('menu'); ?>" type="hidden" value="" />
+<?php
+    }
   }
  
   function update($new_instance, $old_instance) {
