@@ -100,11 +100,14 @@ function is_in_nav_menu( $menu_slug ) {
     }
 
     $items = wp_get_nav_menu_items($menu_slug);
-    foreach($items as $menu_item) {
-    echo ' ' . $menu_item->object_id;
-        if($menu_item->object_id == $id) {
-            return TRUE; // found!
-        }
+    
+    if( is_array( $items ) && ! empty( $items ) ) {
+			foreach($items as $menu_item) {
+				echo ' ' . $menu_item->object_id;
+				if($menu_item->object_id == $id) {
+					return TRUE; // found!
+				}
+			}
     }
     return false;
 }
