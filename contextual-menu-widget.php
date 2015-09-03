@@ -50,7 +50,10 @@ class Contextual_Menu_Widget extends WP_Widget
     // Do Your Widgety Stuff Here...
     global $post;
 
-		$menu_slug = get_greatancestor_name( $post );
+		// Pay respect to your great ancestors!
+		// Get top-level page information
+		$venerable_one = get_greatancestor( $post );
+		$menu_slug = $venerable_one->post_name;
 
     // Get a menu if we have one setup
     if( wp_get_nav_menu_object( $menu_slug) !== FALSE ) {
@@ -174,7 +177,7 @@ function is_in_nav_menu( $menu_slug ) {
     return false;
 }
 
-function get_greatancestor_name( $post ) {      // $post = The current post
+function get_greatancestor( $post ) {      // $post = The current post
     global $post;               // load details about this page
 
     if ( is_page($post) ) {
@@ -185,9 +188,9 @@ function get_greatancestor_name( $post ) {      // $post = The current post
             $root = count($ancestors)-1;
             $greatancestor = $ancestors[$root];
             $post_data = get_post($greatancestor);
-            return $post_data->post_name;
+            return $post_data;
         } else { // if page has no parent
-            return $post->post_name;
+            return $post;
         }
     }
     return false;  // we aren't at the page, and the page is not an ancestor
