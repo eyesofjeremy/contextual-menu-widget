@@ -84,6 +84,12 @@ class Contextual_Menu_Widget extends WP_Widget {
     
     // We will not be outputting anything unless we, in fact, have a menu to post.
     $widget_wanted = FALSE;
+    
+    // Set up args which will be used however the menu is set up.
+    $widget_args = array(
+      'container' => FALSE,
+      'echo' => FALSE,
+    );
  
     // Do Your Widgety Stuff Here...
     global $post;
@@ -101,7 +107,8 @@ class Contextual_Menu_Widget extends WP_Widget {
 
         // Well, we have a menu based on the great ancestor slug - have at it!
         $widget_wanted = TRUE;
-        $widget_output .= wp_nav_menu( array( 'menu' => $menu_slug, 'echo' => FALSE ) );
+        $widget_args['menu'] = $menu_slug;
+        $widget_output .= wp_nav_menu( $widget_args );
 
         if(current_user_can('edit_theme_options')) {
             $widget_output .= '<a class="post-edit-link" href="' . admin_url('nav-menus.php') . '?action=edit&menu=' . wp_get_nav_menu_object($menu_slug)->term_id . '">' . __('edit menu') .'</a>';
@@ -120,21 +127,18 @@ class Contextual_Menu_Widget extends WP_Widget {
         // okay we still want to show a menu
         $widget_wanted = TRUE;
 
-        // Get a submenu
-        $args = array(
-          'menu'    => $menu_backup,
-          'submenu' => $menu_slug,
-          'echo'    => FALSE,
-        );
+        // We will want a submenu.
+        $widget_args['menu'] = $menu_backup;
+        $widget_args['submenu'] = $menu_slug;
 
         // Include parent item if set
         $include_parent = $instance['include_parent'];
         
         if( $include_parent ) {
-          $args['submenu_parent'] = $menu_slug;
+          $widget_args['submenu_parent'] = $menu_slug;
         }
         
-        $widget_output .= wp_nav_menu( $args );
+        $widget_output .= wp_nav_menu( $widget_args );
       }
  
     }
