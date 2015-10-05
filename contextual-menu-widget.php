@@ -26,7 +26,7 @@ class Contextual_Menu_Widget extends WP_Widget {
     $menu           = $instance['menu'];
     $include_parent = $instance['include_parent'] ? 'on' : 'off';
 ?>
-  <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo attribute_escape($title); ?>" /></label></p>
+  <p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
   <p>If you have <a href="<?php echo admin_url(); ?>nav-menus.php">custom menus</a> built, you can use one as the basis for your contextual menu. The items listed will be the part of the menu starting with the top-level ancestor of the current page the visitor is on.</p>
 
 <?php
